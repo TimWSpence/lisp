@@ -5,3 +5,8 @@ TODO
 - I/O
 - Macros
 - Garbage collection
+- Pool allocation
+- Q-expression syntax
+- More types eg double
+- Array syntax
+- Namespaces
