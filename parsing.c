@@ -923,6 +923,10 @@ int main(int argc, char** argv) {
   lenv* e = lenv_new();
   lenv_add_builtins(e);
 
+  lval* core = lval_add(lval_sexpr(), lval_str("core.lspy"));
+  lval* x = builtin_load(e, core);
+  if (x->type == LVAL_ERR) { lval_println(x); }
+
   if(argc == 1) {
 
     puts("Lispy Version 0.0.0.0.2");
