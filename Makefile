@@ -24,4 +24,4 @@ lispy: $(OBJ)
 .PHONY: clean
 
 clean:
-	rm -f lispy $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+	rm -rf lispy lispy.dSYM/* $(ODIR)/*.o *~ core $(INCDIR)/*~
