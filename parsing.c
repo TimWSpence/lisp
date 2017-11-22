@@ -696,6 +696,32 @@ lval* builtin_load(lenv* e, lval* a) {
   }
 }
 
+lval* builtin_slurp(lenv* e, lval* a) {
+  LASSERT_NUM("slurp", a, 1);
+  LASSERT_TYPE("load", a, 0, LVAL_STR);
+
+  char *file_contents;
+  long input_file_size;
+  FILE *input_file = fopen(a->cell[0]->str, "rb");
+  if (input_file == NULL) {
+    return lval_err(strerror(errno));
+  }
+  fseek(input_file, 0, SEEK_END);
+  input_file_size = ftell(input_file);
+  rewind(input_file);
+  file_contents = malloc(input_file_size * (sizeof(char)));
+  fread(file_contents, sizeof(char), input_file_size, input_file);
+  fclose(input_file);
+
+  lval* x = malloc(sizeof(lval));
+  x->type = LVAL_STR;
+  x->str = malloc(input_file_size + 1);
+  strcpy(x->str, file_contents);
+
+  free(file_contents);
+  return x;
+}
+
 lval* builtin_print(lenv* e, lval* a) {
   for (int i = 0; i < a->count; i++) {
     lval_print(a->cell[i]); putchar(' ');
@@ -790,6 +816,7 @@ void lenv_add_builtins(lenv* e) {
   lenv_add_builtin(e, "load",  builtin_load);
   lenv_add_builtin(e, "error", builtin_error);
   lenv_add_builtin(e, "print", builtin_print);
+  lenv_add_builtin(e, "slurp", builtin_slurp);
 }
 
 lval* lval_call(lenv* e, lval* f, lval* a) {
