@@ -696,9 +696,10 @@ lval* builtin_load(lenv* e, lval* a) {
   }
 }
 
+//TODO should slurp/spit be using binary mode?
 lval* builtin_slurp(lenv* e, lval* a) {
   LASSERT_NUM("slurp", a, 1);
-  LASSERT_TYPE("load", a, 0, LVAL_STR);
+  LASSERT_TYPE("slurp", a, 0, LVAL_STR);
 
   char *file_contents;
   long input_file_size;
@@ -719,7 +720,24 @@ lval* builtin_slurp(lenv* e, lval* a) {
   strcpy(x->str, file_contents);
 
   free(file_contents);
+  lval_del(a);
   return x;
+}
+
+lval* builtin_spit(lenv* e, lval* a) {
+  LASSERT_NUM("spit", a, 2);
+  LASSERT_TYPE("spit", a, 0, LVAL_STR);
+  LASSERT_TYPE("spit", a, 1, LVAL_STR);
+
+  FILE *output_file = fopen(a->cell[0]->str, "wb");
+  if (output_file == NULL) {
+    return lval_err(strerror(errno));
+  }
+  fwrite(a->cell[1]->str, sizeof(char), strlen(a->cell[1]->str), output_file);
+  fclose(output_file);
+  lval_del(a);
+
+  return lval_sexpr();
 }
 
 lval* builtin_print(lenv* e, lval* a) {
@@ -817,6 +835,7 @@ void lenv_add_builtins(lenv* e) {
   lenv_add_builtin(e, "error", builtin_error);
   lenv_add_builtin(e, "print", builtin_print);
   lenv_add_builtin(e, "slurp", builtin_slurp);
+  lenv_add_builtin(e, "spit", builtin_spit);
 }
 
 lval* lval_call(lenv* e, lval* f, lval* a) {
