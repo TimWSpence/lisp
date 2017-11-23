@@ -41,6 +41,7 @@ lval* builtin_seq(lenv* e, lval* a);
 lval* builtin_str(lenv* e, lval* a);
 lval* builtin_char(lenv* e, lval* a);
 lval* builtin_int(lenv* e, lval* a);
+lval* builtin_str_includes(lenv* e, lval* a);
 
 /* Miscellaneous functions */
 lval* builtin_load(lenv* e, lval* a);

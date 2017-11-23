@@ -379,3 +379,22 @@ lval* builtin_int(lenv* e, lval* a) {
   lval_del(a);
   return lval_num(c);
 }
+
+lval* builtin_str_includes(lenv* e, lval* a) {
+  LASSERT_NUM("str_includes?", a, 2);
+  LASSERT_TYPE("str_includes?", a, 0, LVAL_STR);
+  LASSERT_TYPE("str_includes?", a, 1, LVAL_STR);
+
+  char* str = a->cell[0]->str;
+  char* sub_str = a->cell[1]->str;
+  char* start = strstr(str, sub_str);
+
+  lval_del(a);
+  lval* r;
+  if(start) {
+    r = lval_num(1);
+  } else {
+    r = lval_num(0);
+  }
+  return r;
+}

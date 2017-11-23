@@ -73,6 +73,7 @@ void lenv_add_builtins(lenv* e) {
   lenv_add_builtin(e, "str", builtin_str);
   lenv_add_builtin(e, "char", builtin_char);
   lenv_add_builtin(e, "int", builtin_int);
+  lenv_add_builtin(e, "str_includes?", builtin_str_includes);
 }
 
 
@@ -90,9 +91,9 @@ int main(int argc, char** argv) {
   mpca_lang(MPCA_LANG_DEFAULT,
   "                                                     \
     number : /-?[0-9]+/ ;                               \
-    symbol : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&]+/ ;         \
+    symbol : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\?]+/ ;      \
     string : /\"(\\\\.|[^\"])*\"/ ;                     \
-    char   : /'.'/ ;                                  \
+    char   : /'.'/ ;                                    \
     comment: /;[^\\r\\n]*/ ;                            \
     sexpr  : '(' <expr>* ')' ;                          \
     qexpr  : '{' <expr>* '}' ;                          \
