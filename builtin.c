@@ -331,3 +331,34 @@ lval* builtin_join(lenv* e, lval* a) {
   return x;
 }
 
+lval* builtin_seq(lenv* e, lval* a) {
+  LASSERT_NUM("seq", a, 1);
+  LASSERT_TYPE("seq", a, 0, LVAL_STR);
+
+  char* str = a->cell[0]->str;
+  lval* seq = lval_qexpr();
+  for(int i=0; i<strlen(str); i++) {
+    lval_add(seq, lval_char(str[i]));
+  }
+  free(a);
+  return seq;
+}
+
+lval* builtin_str(lenv* e, lval* a) {
+  LASSERT_NUM("str", a, 1);
+  LASSERT_TYPE("str", a, 0, LVAL_QEXPR);
+  for(int i=0; i<a->cell[0]->count; i++) {
+    LASSERT_TYPE("str", a->cell[0], i, LVAL_CHAR);
+  }
+
+  lval* seq = a->cell[0];
+  int count = seq->count;
+  char* str = malloc(sizeof(char) * (count+1));
+  for(int i=0; i<count; i++) {
+    str[i] = seq->cell[i]->character;
+  }
+  str[count] = '\0';
+
+  lval_del(a);
+  return lval_str(str);
+}

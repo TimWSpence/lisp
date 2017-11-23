@@ -9,7 +9,7 @@ typedef struct lval lval;
 typedef struct lenv lenv;
 typedef lval* (*lbuiltin)(lenv*, lval*);
 
-enum { LVAL_ERR, LVAL_NUM,   LVAL_SYM, LVAL_STR, LVAL_FUN, LVAL_SEXPR, LVAL_QEXPR };
+enum { LVAL_ERR, LVAL_NUM, LVAL_SYM, LVAL_STR, LVAL_CHAR, LVAL_FUN, LVAL_SEXPR, LVAL_QEXPR };
 
 struct lval {
   int type;
@@ -19,6 +19,7 @@ struct lval {
   char* err;
   char* sym;
   char* str;
+  char character;
 
   /* Function */
   lbuiltin builtin;
@@ -42,6 +43,7 @@ struct lenv {
 mpc_parser_t* Number;
 mpc_parser_t* Symbol;
 mpc_parser_t* String;
+mpc_parser_t* Char;
 mpc_parser_t* Comment;
 mpc_parser_t* Sexpr;
 mpc_parser_t* Qexpr;
@@ -79,6 +81,7 @@ lval* lval_num(long x);
 lval* lval_err(char* fmt, ...);
 lval* lval_sym(char* s);
 lval* lval_str(char* s);
+lval* lval_char(char c);
 lval* lval_sexpr(void);
 lval* lval_qexpr(void);
 lval* lval_fun(lbuiltin func);

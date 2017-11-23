@@ -62,6 +62,13 @@ lval* lval_str(char* s) {
   return v;
 }
 
+lval* lval_char(char c) {
+  lval* v = malloc(sizeof(lval));
+  v->type = LVAL_CHAR;
+  v->character = c;
+  return v;
+}
+
 lval* lval_sexpr(void) {
   lval* v = malloc(sizeof(lval));
   v->type = LVAL_SEXPR;
@@ -130,6 +137,7 @@ void lval_del(lval *v) {
   case LVAL_ERR: free(v->err); break;
   case LVAL_SYM: free(v->sym); break;
   case LVAL_STR: free(v->str); break;
+  case LVAL_CHAR: break;
   case LVAL_SEXPR:
   case LVAL_QEXPR:
     for(int i=0; i<v->count; i++) {
@@ -211,6 +219,8 @@ lval* lval_copy(lval* v) {
     x->str = malloc(strlen(v->str)+1);
     strcpy(x->str, v->str);
     break;
+
+  case LVAL_CHAR: x->character = v->character; break;
 
   case LVAL_SEXPR:
   case LVAL_QEXPR:
@@ -438,6 +448,7 @@ void lval_print(lval* v) {
   case LVAL_ERR: printf("Error: %s", v->err); break;
   case LVAL_SYM: printf("%s", v->sym); break;
   case LVAL_STR: lval_print_str(v); break;
+  case LVAL_CHAR: printf("'%c'", v->character); break;
   case LVAL_SEXPR: lval_expr_print(v, '(', ')'); break;
   case LVAL_QEXPR: lval_expr_print(v, '{', '}'); break;
   }
@@ -465,10 +476,15 @@ lval* lval_read_str(mpc_ast_t* t) {
   return str;
 }
 
+lval* lval_read_char(mpc_ast_t* t) {
+  return lval_char(t->contents[1]);
+}
+
 lval* lval_read(mpc_ast_t* t) {
   if (strstr(t->tag, "number")) { return lval_read_num(t); }
   if (strstr(t->tag, "symbol")) { return lval_sym(t->contents); }
   if (strstr(t->tag, "string")) { return lval_read_str(t); }
+  if (strstr(t->tag, "char")) { return lval_read_char(t); }
 
   lval* x = NULL;
   if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }

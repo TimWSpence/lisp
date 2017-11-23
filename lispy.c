@@ -69,6 +69,8 @@ void lenv_add_builtins(lenv* e) {
   lenv_add_builtin(e, "print", builtin_print);
   lenv_add_builtin(e, "slurp", builtin_slurp);
   lenv_add_builtin(e, "spit", builtin_spit);
+  lenv_add_builtin(e, "seq", builtin_seq);
+  lenv_add_builtin(e, "str", builtin_str);
 }
 
 
@@ -76,6 +78,7 @@ int main(int argc, char** argv) {
   Number  = mpc_new("number");
   Symbol  = mpc_new("symbol");
   String  = mpc_new("string");
+  Char    = mpc_new("char");
   Comment = mpc_new("comment");
   Sexpr   = mpc_new("sexpr");
   Qexpr   = mpc_new("qexpr");
@@ -87,14 +90,15 @@ int main(int argc, char** argv) {
     number : /-?[0-9]+/ ;                               \
     symbol : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&]+/ ;         \
     string : /\"(\\\\.|[^\"])*\"/ ;                     \
-    comment : /;[^\\r\\n]*/ ;                           \
+    char   : /'.'/ ;                                  \
+    comment: /;[^\\r\\n]*/ ;                            \
     sexpr  : '(' <expr>* ')' ;                          \
     qexpr  : '{' <expr>* '}' ;                          \
-    expr   : <number> | <symbol> | <string>             \
-           | <comment> | <sexpr> | <qexpr> ;                        \
+    expr   : <number> | <symbol> | <string> | <char>    \
+           | <comment> | <sexpr> | <qexpr> ;            \
     lispy  : /^/ <expr>* /$/ ;                          \
   ",
-  Number, Symbol, String, Comment, Sexpr, Qexpr, Expr, Lispy);
+  Number, Symbol, String, Char, Comment, Sexpr, Qexpr, Expr, Lispy);
 
   lenv* e = lenv_new();
   lenv_add_builtins(e);
@@ -152,7 +156,7 @@ int main(int argc, char** argv) {
   }
 
   lenv_del(e);
-  mpc_cleanup(8, Number, Symbol, String, Comment, Sexpr, Qexpr, Expr, Lispy);
+  mpc_cleanup(9, Number, Symbol, String, Char, Comment, Sexpr, Qexpr, Expr, Lispy);
 
   return 0;
 }
