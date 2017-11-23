@@ -71,6 +71,8 @@ void lenv_add_builtins(lenv* e) {
   lenv_add_builtin(e, "spit", builtin_spit);
   lenv_add_builtin(e, "seq", builtin_seq);
   lenv_add_builtin(e, "str", builtin_str);
+  lenv_add_builtin(e, "char", builtin_char);
+  lenv_add_builtin(e, "int", builtin_int);
 }
 
 

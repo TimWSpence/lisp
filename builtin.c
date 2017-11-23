@@ -362,3 +362,20 @@ lval* builtin_str(lenv* e, lval* a) {
   lval_del(a);
   return lval_str(str);
 }
+
+lval* builtin_char(lenv* e, lval* a) {
+  LASSERT_NUM("char", a, 1);
+  LASSERT_TYPE("char", a, 0, LVAL_NUM);
+
+  char c = (char)a->cell[0]->num;
+  lval_del(a);
+  return lval_char(c);
+}
+lval* builtin_int(lenv* e, lval* a) {
+  LASSERT_NUM("int", a, 1);
+  LASSERT_TYPE("int", a, 0, LVAL_CHAR);
+
+  int c = (int)a->cell[0]->character;
+  lval_del(a);
+  return lval_num(c);
+}

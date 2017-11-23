@@ -8,3 +8,4 @@ I have plans to extend it beyond the scope of the tutorial, as per the TODO in t
 Thus far, I have added the following:
  - a Makefile so I don't have to remember/keep in my shell history the magic incantation to compile it :)
  - basic file-based I/O via builtins slurp/spit
+ - string functions: seq, str, char, int

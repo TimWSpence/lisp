@@ -20,9 +20,6 @@ lval* builtin_sub(lenv* e, lval* a);
 lval* builtin_mul(lenv* e, lval* a);
 lval* builtin_div(lenv* e, lval* a);
 
-/* String functions */
-lval* builtin_get_chars(lenv* e, lval* a);
-
 /* Comparison functions */
 lval* builtin_eq(lenv* e, lval* a);
 lval* builtin_ne(lenv* e, lval* a);
@@ -39,10 +36,14 @@ lval* builtin_if(lenv* e, lval* a);
 lval* builtin_slurp(lenv* e, lval* a);
 lval* builtin_spit(lenv* e, lval* a);
 
+/* String functions */
+lval* builtin_seq(lenv* e, lval* a);
+lval* builtin_str(lenv* e, lval* a);
+lval* builtin_char(lenv* e, lval* a);
+lval* builtin_int(lenv* e, lval* a);
+
 /* Miscellaneous functions */
 lval* builtin_load(lenv* e, lval* a);
 lval* builtin_error(lenv* e, lval* a);
 lval* builtin_print(lenv* e, lval* a);
 lval* builtin_eval(lenv* e, lval* a);
-lval* builtin_seq(lenv* e, lval* a);
-lval* builtin_str(lenv* e, lval* a);
